@@ -2,7 +2,7 @@
 Just a basic muck mono cheat written in c#
 
 Featuring: <br /> 
-Godmode <br />  
+Godmode <br />
 Infinite stamina <br /> 
 Infinite hunger <br /> 
 Esp <br /> 
