@@ -8,4 +8,4 @@ Infinite hunger
 Esp
 Spawn Bosses as neutral
 
-![alt tag](https://imgur.com/a/iGmRAzP.png)
+[Imgur](https://i.imgur.com/tDQxHOM.png)
