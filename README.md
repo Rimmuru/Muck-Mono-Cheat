@@ -9,4 +9,4 @@ Esp
 Spawn Bosses as neutral
 
 ![Imgur](https://i.imgur.com/tDQxHOM.png)
-![alt text](https://i.imgur.com/oT7CSE6.png)
+
