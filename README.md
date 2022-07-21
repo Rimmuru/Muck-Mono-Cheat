@@ -1,12 +1,13 @@
-# Muck-Mono-Cheat
-Just a basic muck mono cheat written in c#
+# Rimurus Muck Edition
+Just a basic muck mono cheat
 
-Featuring: <br /> 
+# Featuring: <br /> 
 Godmode <br />
 Infinite stamina <br /> 
 Infinite hunger <br /> 
 Esp <br /> 
-Spawn Bosses as neutral
+Spawn Random Boss <br /> 
+Spawn Cow <br /> 
 
 ![Imgur](https://i.imgur.com/tDQxHOM.png)
 
