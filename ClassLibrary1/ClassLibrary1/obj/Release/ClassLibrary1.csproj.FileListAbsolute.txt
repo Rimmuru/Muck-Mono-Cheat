@@ -1,2 +1,0 @@
-C:\Users\l\Documents\Muck-Mono-Cheat-main\ClassLibrary1\obj\Release\ClassLibrary1.csproj.AssemblyReference.cache
-C:\Users\l\Documents\Muck-Mono-Cheat-main\ClassLibrary1\obj\Release\ClassLibrary1.csproj.CoreCompileInputs.cache
