@@ -4,7 +4,6 @@ namespace ClassLibrary1
 {
     public class Loader
     {
-
         public static GameObject obj;
         public static void Load()
         {

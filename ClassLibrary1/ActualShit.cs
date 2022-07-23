@@ -7,21 +7,6 @@ namespace ClassLibrary1
     {
         public static Texture2D lineTex;
 
-        public void notify(string text, int time)
-        {
-            //renderer
-            GUIStyle style = new GUIStyle
-            {
-                fontSize = 20
-            };
-
-            int timer = 0;
-            while(timer < time)
-            {
-                GUI.Label(new Rect(75, 125, 900, 900), text, style);
-            }
-        }
-
         public static void DrawLine(Vector2 pointA, Vector2 pointB, Color color, float width)
         {
             Matrix4x4 matrix = GUI.matrix;
@@ -43,34 +28,25 @@ namespace ClassLibrary1
             GUI.color = color2;
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
-        public void Start()
-        {
-            AllocConsole();
-        }
-
         public void OnGUI()
         {
             //renderer
             GUIStyle style = new GUIStyle
             {
-                fontSize = 25
+                fontSize = 20
             };
 
-            GUI.Label(new Rect(100, 100, 1000, 1000), "Rimurus Menu: Muck Edition", style);
+            GUI.Label(new Rect(50, 100, 1000, 1000), "Rimurus Menu: Muck Edition", style);
+            GUI.Label(new Rect(50, 500, 1000, 1000), "Controls:\nP: Spawn Cow\nG: Max Health\nS: Spawn Random Boss", style);
 
-            GUI.Label(new Rect(80, 50, 1000, 1000), "Controls:\np: spawn cow\ng: godmode\ns: spawn random boss", style);
-
-            foreach (Mob mob1 in Object.FindObjectsOfType(typeof(Mob)) as Mob[])
+            foreach (Mob mob1 in FindObjectsOfType(typeof(Mob)) as Mob[])
             {
                 Vector3 pos = Camera.current.WorldToScreenPoint(mob1.transform.position);
 
                 if (pos.z > 0)
                 {
                     GUI.Label(new Rect(pos.x, (float)Screen.height - pos.y, 100, 100), mob1.name.Replace("(Clone)", "").Replace("StoneTitan", "Big Chunk"));
-
+                    mob1.mobType.speed = 1000;
                     Vector2 screen;
                     screen.x = (float)Screen.width / 2;
                     screen.y = (float)Screen.height;
@@ -84,13 +60,6 @@ namespace ClassLibrary1
                 }
             }
 
-        
-            foreach (InventoryItem chest in ItemManager.Instance.allItems.Values)
-            {
-                System.Console.WriteLine(chest.name);
-            }
-
-
             if (Input.GetKeyDown(KeyCode.S))
             {
                var rand = new System.Random();
@@ -100,25 +69,16 @@ namespace ClassLibrary1
                 GameLoop.Instance.StartBoss(GameLoop.Instance.bosses[num]);
             }
 
-            bool godmode = false;
             if (Input.GetKeyDown(KeyCode.G))
             {
-                godmode = !godmode;
-            }
+                PlayerStatus.Instance.stamina = 9999;
+                PlayerStatus.Instance.hunger = 9999;
+                PlayerStatus.Instance.maxHp = 9999;
+                PlayerStatus.Instance.hp = PlayerStatus.Instance.maxHp;
+            }       
 
-            if(godmode)
-            {
-               PlayerStatus.Instance.stamina = 9999;
-               PlayerStatus.Instance.hunger = 9999;
-               PlayerStatus.Instance.maxHp = 9999;
-               PlayerStatus.Instance.hp = PlayerStatus.Instance.maxHp;
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                MobSpawner.Instance.SpawnMob(PlayerStatus.Instance.transform.position, 0, 0, 1, 1);
-            }
+            if (Input.GetKeyDown(KeyCode.P))          
+                MobSpawner.Instance.SpawnMob(PlayerStatus.Instance.transform.position, 0, 0, 1, 1);        
         }
     }
 }
