@@ -1,13 +1,19 @@
 # Rimurus Muck Edition
-Just a basic muck mono cheat
 
-# Featuring: <br /> 
+# Features: <br /> 
 Godmode <br />
 Infinite stamina <br /> 
 Infinite hunger <br /> 
+Run Speed <br /> 
 Esp <br /> 
-Spawn Random Boss <br /> 
-Spawn Cow <br /> 
+Freeze Times <br /> 
 
-![Imgur](https://i.imgur.com/tDQxHOM.png)
+# How to use:
+Download [Sharp](https://www.unknowncheats.me/forum/unity/408878-sharpmonoinjector-fixed-updated.html)<br>
+Class Name: Loader <br>
+Method: Load <br> <br>
+![Imgur](https://i.postimg.cc/FFkc7VG7/image.png)
 
+# Credits
+Rreis019 - Menu UI <br>
+Reeko - Teaching me mono shit
