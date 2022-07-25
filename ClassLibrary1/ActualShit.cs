@@ -1,11 +1,24 @@
-﻿using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityMenuUI;
+using System.Reflection;
 
 namespace ClassLibrary1
 {
     class ActualShit : MonoBehaviour
     {
         public static Texture2D lineTex;
+
+        Menu playerOptions = new Menu(10, 10, "Player Options");
+        Menu miscOptions = new Menu(240, 10, "Misc Options");
+
+        bool GodMode = false;
+        bool noHunger = false;
+        bool infiniteSprint = false;
+        bool alwaysDay = false;
+        bool esp = false;
+
+        float playerSpeed = 1;
+        FieldInfo movespeed = typeof(PlayerMovement).GetField("maxRunSpeed", BindingFlags.Instance | BindingFlags.NonPublic);
 
         public static void DrawLine(Vector2 pointA, Vector2 pointB, Color color, float width)
         {
@@ -28,57 +41,80 @@ namespace ClassLibrary1
             GUI.color = color2;
         }
 
+        void Start()
+        {
+            playerOptions.m_controls.bottom = 20;
+            playerOptions.StartX = 5;
+            playerOptions.StartY = 15;
+
+            miscOptions.m_controls.bottom = 20;
+            miscOptions.StartX = 5 + playerOptions.Width / 2;
+            miscOptions.StartY = 15;
+        }
+
         public void OnGUI()
         {
-            //renderer
-            GUIStyle style = new GUIStyle
-            {
-                fontSize = 20
-            };
-
-            GUI.Label(new Rect(50, 100, 1000, 1000), "Rimurus Menu: Muck Edition", style);
-            GUI.Label(new Rect(50, 500, 1000, 1000), "Controls:\nP: Spawn Cow\nG: Max Health\nS: Spawn Random Boss", style);
+            GUI.Label(new Rect(Screen.width + Screen.width / 2 + 50, Screen.height / 10, 1000, 1000), "Rimurus Menu: Muck Edition");
 
             foreach (Mob mob1 in FindObjectsOfType(typeof(Mob)) as Mob[])
             {
                 Vector3 pos = Camera.current.WorldToScreenPoint(mob1.transform.position);
-
                 if (pos.z > 0)
                 {
-                    GUI.Label(new Rect(pos.x, (float)Screen.height - pos.y, 100, 100), mob1.name.Replace("(Clone)", "").Replace("StoneTitan", "Big Chunk"));
-                    mob1.mobType.speed = 1000;
+
                     Vector2 screen;
                     screen.x = (float)Screen.width / 2;
-                    screen.y = (float)Screen.height;
+                    screen.y = Screen.height;
 
                     Vector2 enemypos;
                     enemypos.x = pos.x;
-                    enemypos.y = (float)Screen.height - pos.y;
+                    enemypos.y = Screen.height - pos.y;
 
                     var blue = new Color(52.0f / 255.0f, 155.0f / 255.0f, 235.0f / 255.0f, 1.0f); ;
-                    DrawLine(screen, enemypos, blue, 1.5f);
+                    if (esp)
+                    {
+                        GUI.Label(new Rect(pos.x, Screen.height - pos.y, 100, 100), mob1.name.Replace("(Clone)", "").Replace("StoneTitan", "Big Chunk"));
+                        DrawLine(screen, enemypos, blue, 1.5f);
+                    }
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
+            playerOptions.Start();
             {
-               var rand = new System.Random();
-               int num = rand.Next(0, 3);
+                GodMode = playerOptions.Toggle("GodMode", GodMode);
+                noHunger = playerOptions.Toggle("No Hunger", noHunger);
+                infiniteSprint = playerOptions.Toggle("Inf Sprint", infiniteSprint);
+                playerSpeed = playerOptions.Slider_Float("Run Speed", playerSpeed, 100, 30, 0, 100);
 
-                GameLoop.Instance.bosses[num].behaviour = MobType.MobBehaviour.Neutral;
-                GameLoop.Instance.StartBoss(GameLoop.Instance.bosses[num]);
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
+            miscOptions.Start();
             {
-                PlayerStatus.Instance.stamina = 9999;
-                PlayerStatus.Instance.hunger = 9999;
+                alwaysDay = miscOptions.Toggle("Freeze Time", alwaysDay);
+                esp = miscOptions.Toggle("Esp", esp);
+            }
+
+            if (GodMode)
+            {
                 PlayerStatus.Instance.maxHp = 9999;
                 PlayerStatus.Instance.hp = PlayerStatus.Instance.maxHp;
-            }       
+            }
 
-            if (Input.GetKeyDown(KeyCode.P))          
-                MobSpawner.Instance.SpawnMob(PlayerStatus.Instance.transform.position, 0, 0, 1, 1);        
+            if (noHunger)
+                PlayerStatus.Instance.hunger = PlayerStatus.Instance.maxHunger;
+
+            if (infiniteSprint)
+                PlayerStatus.Instance.stamina = PlayerStatus.Instance.maxStamina;
+
+            movespeed.SetValue(PlayerMovement.Instance, 3500 * playerSpeed);
+            
+            if (alwaysDay)
+                DayCycle.dayDuration = int.MaxValue;
+
+            //trying to figure out free chests
+            FieldInfo chest = typeof(ChestManager).GetField("chestId", BindingFlags.Instance | BindingFlags.NonPublic);
+            int chestId = (int)chest.GetValue(ChestManager.Instance);
+            ChestManager.Instance.UseChest(chestId, false);
         }
     }
 }
